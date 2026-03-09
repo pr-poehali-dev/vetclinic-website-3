@@ -83,6 +83,8 @@ export default function Index() {
   const [scrolled, setScrolled] = useState(false);
   const [formData, setFormData] = useState({ name: "", phone: "", pet: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formError, setFormError] = useState("");
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 40);
@@ -90,11 +92,25 @@ export default function Index() {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    setFormData({ name: "", phone: "", pet: "", message: "" });
-    setTimeout(() => setSent(false), 4000);
+    setLoading(true);
+    setFormError("");
+    try {
+      const res = await fetch("https://functions.poehali.dev/69b1062b-3bbd-4857-8ffe-e8eb76590461", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Ошибка отправки");
+      setSent(true);
+      setFormData({ name: "", phone: "", pet: "", message: "" });
+      setTimeout(() => setSent(false), 5000);
+    } catch {
+      setFormError("Не удалось отправить заявку. Позвоните нам: +7 960 941 69 36");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const scrollTo = (href: string) => {
@@ -394,11 +410,19 @@ export default function Index() {
                         className="w-full border-b border-neutral-200 focus:border-emerald-500 outline-none py-3 text-sm bg-transparent transition-colors duration-200 placeholder:text-neutral-300 resize-none"
                       />
                     </div>
+                    {formError && (
+                      <p className="text-red-500 text-sm">{formError}</p>
+                    )}
                     <button
                       type="submit"
-                      className="inline-flex items-center gap-2 bg-emerald-600 text-white px-8 py-4 rounded-full text-sm font-medium hover:bg-emerald-700 transition-all duration-200 hover:gap-3 mt-2"
+                      disabled={loading}
+                      className="inline-flex items-center gap-2 bg-emerald-600 text-white px-8 py-4 rounded-full text-sm font-medium hover:bg-emerald-700 transition-all duration-200 hover:gap-3 mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                      Записаться <Icon name="ArrowRight" size={16} />
+                      {loading ? (
+                        <><Icon name="Loader2" size={16} className="animate-spin" /> Отправляем...</>
+                      ) : (
+                        <>Записаться <Icon name="ArrowRight" size={16} /></>
+                      )}
                     </button>
                   </form>
                 )}
