@@ -81,10 +81,18 @@ function AnimSection({ children, className = "" }: { children: React.ReactNode; 
 export default function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [formData, setFormData] = useState({ name: "", phone: "", pet: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", phone: "", pet: "", breed: "", symptoms: "", slot_id: "", message: "" });
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState("");
+  const [slots, setSlots] = useState<{ id: number; date: string; time: string }[]>([]);
+
+  useEffect(() => {
+    fetch("https://functions.poehali.dev/1a16257a-5e98-47b8-834f-84acddad3666")
+      .then((r) => r.json())
+      .then((d) => setSlots(d.slots || []))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 40);
@@ -102,12 +110,16 @@ export default function Index() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (!res.ok) throw new Error("Ошибка отправки");
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Ошибка отправки");
+      }
       setSent(true);
-      setFormData({ name: "", phone: "", pet: "", message: "" });
+      setFormData({ name: "", phone: "", pet: "", breed: "", symptoms: "", slot_id: "", message: "" });
       setTimeout(() => setSent(false), 5000);
-    } catch {
-      setFormError("Не удалось отправить заявку. Позвоните нам: +7 960 941 69 36");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "";
+      setFormError(msg || "Не удалось отправить заявку. Позвоните нам: +7 960 941 69 36");
     } finally {
       setLoading(false);
     }
@@ -357,6 +369,17 @@ export default function Index() {
                     </div>
                   </div>
                 </div>
+                <div className="mt-8">
+                  <a
+                    href="https://t.me/comravetbot?start=w98835525"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-3 bg-[#229ED9] text-white px-7 py-4 rounded-full text-sm font-medium hover:bg-[#1a8bc2] transition-all duration-200 shadow-sm"
+                  >
+                    <Icon name="Send" size={16} />
+                    Записаться через Telegram
+                  </a>
+                </div>
               </div>
 
               <div>
@@ -392,21 +415,61 @@ export default function Index() {
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Питомец</label>
+                      <label className="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Питомец (вид и имя)</label>
                       <input
                         value={formData.pet}
                         onChange={(e) => setFormData({ ...formData, pet: e.target.value })}
-                        placeholder="Вид и имя (например: кот Мурзик)"
+                        placeholder="Например: собака Рекс"
                         className="w-full border-b border-neutral-200 focus:border-emerald-500 outline-none py-3 text-sm bg-transparent transition-colors duration-200 placeholder:text-neutral-300"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Причина визита</label>
+                      <label className="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Порода собаки</label>
+                      <input
+                        value={formData.breed}
+                        onChange={(e) => setFormData({ ...formData, breed: e.target.value })}
+                        placeholder="Например: лабрадор, овчарка..."
+                        className="w-full border-b border-neutral-200 focus:border-emerald-500 outline-none py-3 text-sm bg-transparent transition-colors duration-200 placeholder:text-neutral-300"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Краткое описание симптомов</label>
                       <textarea
-                        rows={3}
+                        rows={2}
+                        value={formData.symptoms}
+                        onChange={(e) => setFormData({ ...formData, symptoms: e.target.value })}
+                        placeholder="Что беспокоит питомца? Как давно?"
+                        className="w-full border-b border-neutral-200 focus:border-emerald-500 outline-none py-3 text-sm bg-transparent transition-colors duration-200 placeholder:text-neutral-300 resize-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Желаемая дата и время приёма</label>
+                      {slots.length > 0 ? (
+                        <select
+                          value={formData.slot_id}
+                          onChange={(e) => setFormData({ ...formData, slot_id: e.target.value })}
+                          className="w-full border-b border-neutral-200 focus:border-emerald-500 outline-none py-3 text-sm bg-transparent transition-colors duration-200 text-neutral-700"
+                        >
+                          <option value="">— Выберите удобное время —</option>
+                          {slots.map((s) => (
+                            <option key={s.id} value={s.id}>
+                              {new Date(s.date).toLocaleDateString("ru-RU", { day: "numeric", month: "long", weekday: "short" })} · {s.time}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <p className="py-3 text-sm text-neutral-400 border-b border-neutral-100">
+                          Свободных слотов пока нет — мы свяжемся с вами и уточним время.
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Комментарий (необязательно)</label>
+                      <textarea
+                        rows={2}
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        placeholder="Опишите проблему или укажите нужную услугу..."
+                        placeholder="Дополнительные пожелания..."
                         className="w-full border-b border-neutral-200 focus:border-emerald-500 outline-none py-3 text-sm bg-transparent transition-colors duration-200 placeholder:text-neutral-300 resize-none"
                       />
                     </div>

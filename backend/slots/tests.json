@@ -1,0 +1,12 @@
+{
+  "tests": [
+    {
+      "name": "GET available slots",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {"slots": []},
+      "bodyMatcher": "partial"
+    }
+  ]
+}
