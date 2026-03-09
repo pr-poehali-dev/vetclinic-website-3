@@ -118,7 +118,7 @@ export default function Index() {
               <Icon name="Heart" size={13} className="text-white fill-white" />
             </div>
             <span className="font-display text-xl font-semibold tracking-tight text-neutral-900">
-              Доктор Айболит
+              Ветклиника АГАУ
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-8">
@@ -165,7 +165,7 @@ export default function Index() {
         <div className="max-w-6xl mx-auto w-full">
           <div className="opacity-0 animate-fade-up">
             <span className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-emerald-700 mb-8 border border-emerald-200 bg-emerald-50 rounded-full px-4 py-1.5">
-              Ветеринарная клиника · Москва
+              Ветеринарная клиника АГАУ
             </span>
           </div>
           <div className="opacity-0 animate-fade-up-1">
@@ -187,10 +187,10 @@ export default function Index() {
               Записаться на приём <Icon name="ArrowRight" size={16} />
             </button>
             <a
-              href="tel:+79990000000"
+              href="tel:+79609416936"
               className="inline-flex items-center gap-2 text-neutral-600 px-8 py-4 rounded-full text-sm border border-neutral-200 hover:border-neutral-400 transition-colors duration-200"
             >
-              <Icon name="Phone" size={15} /> +7 (999) 000-00-00
+              <Icon name="Phone" size={15} /> +7 960 941 69 36
             </a>
           </div>
         </div>
@@ -292,7 +292,7 @@ export default function Index() {
               <p className="text-emerald-100 mt-2 text-sm">Принимаем животных в любое время суток.</p>
             </div>
             <a
-              href="tel:+79990000000"
+              href="tel:+79609416936"
               className="shrink-0 inline-flex items-center gap-2 bg-white text-emerald-700 px-8 py-4 rounded-full text-sm font-medium hover:bg-emerald-50 transition-colors duration-200"
             >
               <Icon name="Phone" size={16} /> Позвонить сейчас
@@ -313,28 +313,32 @@ export default function Index() {
                 </h2>
                 <div className="space-y-6 text-sm text-neutral-500">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center shrink-0">
                       <Icon name="Phone" size={14} />
                     </div>
-                    <span>+7 (999) 000-00-00</span>
+                    <a href="tel:+79609416936" className="hover:text-emerald-600 transition-colors">+7 960 941 69 36</a>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center shrink-0">
+                      <Icon name="Send" size={14} />
+                    </div>
+                    <a href="https://t.me/comravet" target="_blank" rel="noreferrer" className="hover:text-emerald-600 transition-colors">@comravet</a>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center shrink-0">
                       <Icon name="Mail" size={14} />
                     </div>
-                    <span>info@aybolit-vet.ru</span>
+                    <a href="mailto:comravet@mail.ru" className="hover:text-emerald-600 transition-colors">comravet@mail.ru</a>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center">
-                      <Icon name="MapPin" size={14} />
+                  <div className="flex items-start gap-3 pt-4 border-t border-neutral-100">
+                    <div className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center shrink-0 mt-0.5">
+                      <Icon name="Building2" size={14} />
                     </div>
-                    <span>Москва, ул. Примерная, д. 1</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center">
-                      <Icon name="Clock" size={14} />
+                    <div className="text-xs text-neutral-400 leading-relaxed">
+                      ООО «Ветклиника АГАУ»<br />
+                      ИНН: 2222907971 · КПП: 222201001<br />
+                      ОГРН: 1242200010722
                     </div>
-                    <span>Пн–Вс: 9:00 – 21:00 · Экстренно: 24 / 7</span>
                   </div>
                 </div>
               </div>
@@ -411,11 +415,11 @@ export default function Index() {
             <div className="w-5 h-5 rounded-full bg-emerald-600 flex items-center justify-center">
               <Icon name="Heart" size={9} className="text-white fill-white" />
             </div>
-            <span className="font-display text-base font-semibold text-neutral-900">Доктор Айболит</span>
+            <span className="font-display text-base font-semibold text-neutral-900">Ветклиника АГАУ</span>
           </div>
-          <span className="text-xs text-neutral-400">© 2026 Ветеринарная клиника «Доктор Айболит». Все права защищены.</span>
-          <a href="tel:+79990000000" className="text-xs text-neutral-500 hover:text-emerald-600 transition-colors duration-200">
-            +7 (999) 000-00-00
+          <span className="text-xs text-neutral-400">© 2026 ООО «Ветклиника АГАУ». Все права защищены.</span>
+          <a href="tel:+79609416936" className="text-xs text-neutral-500 hover:text-emerald-600 transition-colors duration-200">
+            +7 960 941 69 36
           </a>
         </div>
       </footer>
